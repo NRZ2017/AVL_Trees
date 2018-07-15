@@ -10,6 +10,18 @@ namespace AVL_Trees
     {
         static void Main(string[] args)
         {
+            AVL<int> avl = new AVL<int>();
+            avl.Insert(22);
+            avl.Insert(30);
+            avl.Insert(10);
+            avl.Insert(3);
+            avl.Delete(10);
+            avl.Delete(22);
         }
+
     }
 }
+
+
+
+
