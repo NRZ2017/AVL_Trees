@@ -51,6 +51,8 @@ namespace AVL_Trees
                         }
                     }
                 }
+
+                Balance(tempNode);
             }
 
 
@@ -72,6 +74,7 @@ namespace AVL_Trees
                 else
                 {
                     RemoveNode(tempnode);
+                    Balance(tempnode.Parent);
                     Count--;
                     return true;
                 }
@@ -123,12 +126,41 @@ namespace AVL_Trees
             }
         }
 
-        private AVLNode<T> Balance(AVLNode<T> node)
+        private void Balance(AVLNode<T> node)
         {
-            //a nodes balance = RightChildHeight - LeftChildHeight
+            if(node == null)
+            {
+            //update height of node
+            node.UpdateHeight();
+            //get balance of node
+            if (node.Balance > 1)
+            {
+                RotateLeft(node);
+                if(node.Balance > 2)
+                {
+                    RotateRight(node);
+                }
+            }
+            if(node.Balance < -1)
+            {
+                RotateRight(node);
+                if (node.Balance < -2)
+                {
+                    RotateLeft(node);
+                }
+            }
+            //if balance > 1
+            //rotate left
 
+            //if balance < 1
+            //rotate right
 
-            throw new NotFiniteNumberException();
+            if (node.Parent != null)
+            {
+                Balance(node.Parent);
+            }
+            }
+            
         }
 
         private void RotateLeft(AVLNode<T> node)
@@ -148,23 +180,53 @@ namespace AVL_Trees
                 last.Parent = node;
             }
 
-            if(parent != null)
+            if (parent != null)
             {
-                if(parent.LeftChild == node)
+                if (parent.LeftChild == node)
                 {
                     parent.LeftChild = child;
                 }
-                else if(parent.RightChild == node)
+                else if (parent.RightChild == node)
                 {
                     parent.RightChild = child;
                 }
             }
-            //update height
+
+            node.UpdateHeight();
+            child.UpdateHeight();
         }
 
         private void RotateRight(AVLNode<T> node)
         {
+            var parent = node.Parent;
+            var child = node.RightChild;
+            var last = child.LeftChild;
 
+            child.RightChild = node;
+            child.Parent = last;
+
+            node.Parent = child;
+            node.LeftChild = last;
+
+            if (last != null)
+            {
+                last.Parent = node;
+            }
+
+            if (parent != null)
+            {
+                if (parent.RightChild == node)
+                {
+                    parent.RightChild = child;
+                }
+                else if (parent.RightChild == node)
+                {
+                    parent.LeftChild = child;
+                }
+            }
+
+            node.UpdateHeight();
+            child.UpdateHeight();
         }
     }
 }
